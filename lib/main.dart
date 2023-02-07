@@ -28,16 +28,10 @@ class Home extends StatelessWidget {
         centerTitle: true,
       ),
       body: const Center(
-        child: Text(
-            "Siema!",
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 2.0,
-              color: Colors.grey,
-              fontFamily: 'BebasNeue',
-            )
-        ),
+        child: Image(
+          // image: NetworkImage('https://essereuomo.it/wp-content/uploads/2021/10/sdsdsd.jpg'),
+          image: AssetImage('assets/E-ULr-OXEAA1b2P.jpg')
+        )
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.red,
