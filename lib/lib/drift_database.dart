@@ -107,6 +107,44 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
 
   Future<List<DishData>> getAllDishes() => select(dish).get();
 
+  //////////////////
+  // search testowy - źrodlo: https://drift.simonbinder.eu/docs/advanced-features/joins/
+  //////////////////
+
+  //
+  // v2 -- testowa wersja ktora bierze pod uwage tylko tagi
+  //
+  Future<List<DishData>> dishSearch(List<int>? tagIds, List<int>? ingredientIds, String stringBar) {
+    final query = select(dish).join([
+      leftOuterJoin(tag, tag.id.equalsExp(dish.id)),
+    ])
+      ..where(dish.name.contains(stringBar));
+    return query.map((row) => row.readTable(dish)).get();
+  }
+
+  //
+  // v3 double join bo i tagi i skladniki
+  //
+  Future<List<DishData>> deezDishes(List<int>? tagIds, List<int>? ingredientIds, String stringBar) async {
+
+    final otherDishes = alias(dish, 'Alhamdullulah');
+
+    final query = select(otherDishes).join([
+
+      innerJoin(tag, tag.id.equalsExp(otherDishes.id),
+          useColumns: false),
+      innerJoin(ingredient, dish.id.equalsExp(ingredient.id),
+          useColumns: false),
+    ])
+      ..where(dish.name.contains(stringBar));
+
+    return query.map((row) => row.readTable(otherDishes)).get();
+  }
+
+  /////////////////////
+  /////////////////////
+  /////////////////////
+
   Stream<List<DishData>> watchAllDishes() => select(dish).watch();
 
   Future<void> insertDish(FullDish entry) {
