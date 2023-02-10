@@ -67,6 +67,10 @@ class AppDatabase extends _$AppDatabase {
 class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
   DishDao(AppDatabase db) : super(db);
 
+  Future<List<DishData>> getAllDishes() => select(dish).get();
+
+  Stream<List<DishData>> watchAllDishes() => select(dish).watch();
+
   Stream<FullDish> watchDish(int id) {
     final dishQuery = select(dish)..where((entry) => entry.id.equals(id));
 
@@ -105,47 +109,19 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
     });
   }
 
-  Future<List<DishData>> getAllDishes() => select(dish).get();
+  Stream<List<DishData>> searchByConditions(
+      List<int> tagIds, List<int> ingredientIds, String stringBar) {
+    final resultQuery = select(dish).join(
+      [
+        innerJoin(dishTag, dishTag.dishId.equalsExp(dish.id)),
+        innerJoin(dishIngredient, dishIngredient.dishId.equalsExp(dish.id)),
+      ],
+    )..where(dishTag.tagId.isIn(tagIds) &
+        dishIngredient.ingredientId.isIn(ingredientIds) &
+        dish.name.contains(stringBar));
 
-  //////////////////
-  // search testowy - źrodlo: https://drift.simonbinder.eu/docs/advanced-features/joins/
-  //////////////////
-
-  //
-  // v2 -- testowa wersja ktora bierze pod uwage tylko tagi
-  //
-  Future<List<DishData>> dishSearch(List<int>? tagIds, List<int>? ingredientIds, String stringBar) {
-    final query = select(dish).join([
-      leftOuterJoin(tag, tag.id.equalsExp(dish.id)),
-    ])
-      ..where(dish.name.contains(stringBar));
-    return query.map((row) => row.readTable(dish)).get();
+    return resultQuery.map((row) => row.readTable(dish)).watch();
   }
-
-  //
-  // v3 double join bo i tagi i skladniki
-  //
-  Future<List<DishData>> deezDishes(List<int>? tagIds, List<int>? ingredientIds, String stringBar) async {
-
-    final otherDishes = alias(dish, 'Alhamdullulah');
-
-    final query = select(otherDishes).join([
-
-      innerJoin(tag, tag.id.equalsExp(otherDishes.id),
-          useColumns: false),
-      innerJoin(ingredient, dish.id.equalsExp(ingredient.id),
-          useColumns: false),
-    ])
-      ..where(dish.name.contains(stringBar));
-
-    return query.map((row) => row.readTable(otherDishes)).get();
-  }
-
-  /////////////////////
-  /////////////////////
-  /////////////////////
-
-  Stream<List<DishData>> watchAllDishes() => select(dish).watch();
 
   Future<void> insertDish(FullDish entry) {
     return transaction(() async {
@@ -170,9 +146,43 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
     });
   }
 
-  Future updateDish(Insertable<DishData> newDish) =>
-      update(dish).replace(newDish);
+  Future<void> updateDish(FullDish entry, int dishToUpdateId) {
+    return transaction(() async {
+      await (update(dish)..where((d) => d.id.equals(dishToUpdateId))).write(
+        DishCompanion(
+          name: Value(entry.dish.name),
+          timeToPrepare: Value(entry.dish.timeToPrepare),
+        ),
+      );
 
-  Future deleteDish(Insertable<DishData> newDish) =>
-      delete(dish).delete(newDish);
+      await (delete(dishTag)..where((d) => d.dishId.equals(dishToUpdateId)))
+          .go();
+
+      await (delete(dishIngredient)
+            ..where((d) => d.dishId.equals(dishToUpdateId)))
+          .go();
+
+      for (final tag in entry.tags) {
+        await into(dishTag)
+            .insert(DishTagData(dishId: dishToUpdateId, tagId: tag.id));
+      }
+      for (final ingredient in entry.ingredients) {
+        await into(dishIngredient).insert(DishIngredientData(
+            dishId: dishToUpdateId, ingredientId: ingredient.id));
+      }
+    });
+  }
+
+  Future<void> deleteDish(int dishToDeleteId) {
+    return transaction(() async {
+      await (delete(dish)..where((d) => d.id.equals(dishToDeleteId))).go();
+
+      await (delete(dishTag)..where((d) => d.dishId.equals(dishToDeleteId)))
+          .go();
+
+      await (delete(dishIngredient)
+            ..where((d) => d.dishId.equals(dishToDeleteId)))
+          .go();
+    });
+  }
 }
