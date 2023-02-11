@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class NewDishInput extends StatefulWidget {
   const NewDishInput({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

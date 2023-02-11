@@ -10,11 +10,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Provider(
-      create: (_) => AppDatabase().dishDao,
-        child: MaterialApp(
+      create: (_) => AppDatabase(),
+      builder: (context, child) {
+        // No longer throws
+        return MaterialApp(
           title: 'Material App',
           home: HomePage(),
-        ),
+        );
+      }
+        // child:
     );
   }
 }
