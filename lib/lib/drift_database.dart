@@ -67,9 +67,6 @@ class AppDatabase extends _$AppDatabase {
 class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
   DishDao(AppDatabase db) : super(db);
 
-  Future<List<DishData>> getAllDishes() => select(dish).get();
-
-  Stream<List<DishData>> watchAllDishes() => select(dish).watch();
 
   Stream<FullDish> watchDish(int id) {
     final dishQuery = select(dish)..where((entry) => entry.id.equals(id));
@@ -109,6 +106,7 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
     });
   }
 
+
   Stream<List<DishData>> searchByConditions(
       List<int> tagIds, List<int> ingredientIds, String stringBar) {
     final resultQuery = select(dish).join(
@@ -116,12 +114,21 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
         innerJoin(dishTag, dishTag.dishId.equalsExp(dish.id)),
         innerJoin(dishIngredient, dishIngredient.dishId.equalsExp(dish.id)),
       ],
-    )..where(dishTag.tagId.isIn(tagIds) &
-        dishIngredient.ingredientId.isIn(ingredientIds) &
-        dish.name.contains(stringBar));
+    )..where(
+         tagIds.isNotEmpty ? dishTag.tagId.isIn(tagIds) : dish.id.equalsExp(dish.id) &
+         (ingredientIds.isNotEmpty ? dishIngredient.ingredientId.isIn(ingredientIds) : dish.id.equalsExp(dish.id))
+         & (stringBar.isNotEmpty ? dish.name.contains(stringBar) : dish.id.equalsExp(dish.id) ));
 
     return resultQuery.map((row) => row.readTable(dish)).watch();
   }
+
+  Future<List<DishData>> getAllDishes() => select(dish).get();
+
+  //metoda zwracaja nazwy tagow dla UI
+  Future<List> getTagNames() => select(tag.name as ResultSetImplementation<HasResultSet, dynamic>).get();
+
+  Stream<List<DishData>> watchAllDishes() => select(dish).watch();
+
 
   Future<void> insertDish(FullDish entry) {
     return transaction(() async {
