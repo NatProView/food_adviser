@@ -17,7 +17,9 @@ class _NewDishInputState extends State<NewDishInput> {
   late int newDishCalories;
   late int newDishTimeToPrepare;
   late String newDishName;
-  late TextEditingController controller;
+  late TextEditingController caloriesController;
+  late TextEditingController timeToPrepareController;
+  late TextEditingController nameController;
 
   // List<TagData> chosenTags;
   // List<IngredientData> chosenIngredients;
@@ -34,7 +36,9 @@ class _NewDishInputState extends State<NewDishInput> {
     newDishCalories = 0;
     newDishTimeToPrepare = 0;
     newDishName = "";
-    controller = TextEditingController();
+    caloriesController = TextEditingController();
+    timeToPrepareController = TextEditingController();
+    nameController = TextEditingController();
   }
 
   @override
@@ -58,7 +62,7 @@ class _NewDishInputState extends State<NewDishInput> {
   Expanded _buildNameField(BuildContext context) {
     return Expanded(
       child: TextField(
-        controller: controller,
+        controller: nameController,
         decoration: InputDecoration(hintText: 'Dish Name'),
         onChanged: (inputName) {
           newDishName = inputName;
@@ -70,7 +74,7 @@ class _NewDishInputState extends State<NewDishInput> {
   Expanded _buildCaloriesField(BuildContext context) {
     return Expanded(
       child: TextFormField(
-        controller: controller,
+        controller: caloriesController,
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(hintText: 'Calories'),
@@ -86,7 +90,7 @@ class _NewDishInputState extends State<NewDishInput> {
   Expanded _buildTimeToPrepareField(BuildContext context) {
     return Expanded(
       child: TextFormField(
-        controller: controller,
+        controller: timeToPrepareController,
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(hintText: 'Time to prepare'),
@@ -172,7 +176,7 @@ class _NewDishInputState extends State<NewDishInput> {
     return IconButton(
         icon: Icon(Icons.add),
         onPressed:() {
-          final database = Provider.of<AppDatabase>(context);
+          final database = Provider.of<AppDatabase>(context, listen: false);
           final tempDish = Dish();
           final dish = FullDish(
               DishData(
@@ -197,7 +201,9 @@ class _NewDishInputState extends State<NewDishInput> {
       newDishName = "";
       // chosenTags = [];
       // chosenIngredients = [];
-      controller.clear();
+      timeToPrepareController.clear();
+      nameController.clear();
+      caloriesController.clear();
     });
   }
 
