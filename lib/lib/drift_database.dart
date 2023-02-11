@@ -122,6 +122,8 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
     return resultQuery.map((row) => row.readTable(dish)).watch();
   }
 
+
+
   Future<List<DishData>> getAllDishes() => select(dish).get();
 
   //metoda zwracaja nazwy tagow dla UI
@@ -135,6 +137,12 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
       final newDish = entry.dish;
       await into(dish).insert(newDish, mode: InsertMode.replace);
 
+      //zliczanie kalorii i dodawnie ich do juz obecnego w tabeli disha
+      int count = 0;
+      for (final ingredient in entry.ingredients) {
+        count += ingredient.calories;
+      }
+
       await (delete(dishTag)..where((entry) => entry.dishId.equals(newDish.id)))
           .go();
 
@@ -142,6 +150,11 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
             ..where((entry) => entry.dishId.equals(newDish.id)))
           .go();
 
+      await (update(dish)..where((d) => d.id.equals(newDish.id))).write(
+        DishCompanion(
+          calories: Value(count),
+        ),
+      );
       for (final tag in entry.tags) {
         await into(dishTag)
             .insert(DishTagData(dishId: newDish.id, tagId: tag.id));
@@ -155,10 +168,15 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
 
   Future<void> updateDish(FullDish entry, int dishToUpdateId) {
     return transaction(() async {
+      int count = 0;
+      for (final ingredient in entry.ingredients) {
+        count += ingredient.calories;
+      }
       await (update(dish)..where((d) => d.id.equals(dishToUpdateId))).write(
         DishCompanion(
           name: Value(entry.dish.name),
           timeToPrepare: Value(entry.dish.timeToPrepare),
+          calories: Value(count),
         ),
       );
 
