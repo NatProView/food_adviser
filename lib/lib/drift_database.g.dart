@@ -7,9 +7,7 @@ class $DishTable extends Dish with TableInfo<$DishTable, DishData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-
   $DishTable(this.attachedDatabase, [this._alias]);
-
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -43,16 +41,12 @@ class $DishTable extends Dish with TableInfo<$DishTable, DishData> {
       check: () => timeToPrepare.isBetweenValues(1, 300),
       type: DriftSqlType.int,
       requiredDuringInsert: true);
-
   @override
   List<GeneratedColumn> get $columns => [id, name, calories, timeToPrepare];
-
   @override
   String get aliasedName => _alias ?? 'dish';
-
   @override
   String get actualTableName => 'dish';
-
   @override
   VerificationContext validateIntegrity(Insertable<DishData> instance,
       {bool isInserting = false}) {
@@ -86,7 +80,6 @@ class $DishTable extends Dish with TableInfo<$DishTable, DishData> {
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
-
   @override
   DishData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -113,13 +106,11 @@ class DishData extends DataClass implements Insertable<DishData> {
   final String name;
   final int calories;
   final int timeToPrepare;
-
   const DishData(
       {required this.id,
       required this.name,
       required this.calories,
       required this.timeToPrepare});
-
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -149,7 +140,6 @@ class DishData extends DataClass implements Insertable<DishData> {
       timeToPrepare: serializer.fromJson<int>(json['timeToPrepare']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -169,7 +159,6 @@ class DishData extends DataClass implements Insertable<DishData> {
         calories: calories ?? this.calories,
         timeToPrepare: timeToPrepare ?? this.timeToPrepare,
       );
-
   @override
   String toString() {
     return (StringBuffer('DishData(')
@@ -183,7 +172,6 @@ class DishData extends DataClass implements Insertable<DishData> {
 
   @override
   int get hashCode => Object.hash(id, name, calories, timeToPrepare);
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -199,14 +187,12 @@ class DishCompanion extends UpdateCompanion<DishData> {
   final Value<String> name;
   final Value<int> calories;
   final Value<int> timeToPrepare;
-
   const DishCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.calories = const Value.absent(),
     this.timeToPrepare = const Value.absent(),
   });
-
   DishCompanion.insert({
     this.id = const Value.absent(),
     required String name,
@@ -215,7 +201,6 @@ class DishCompanion extends UpdateCompanion<DishData> {
   })  : name = Value(name),
         calories = Value(calories),
         timeToPrepare = Value(timeToPrepare);
-
   static Insertable<DishData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -277,9 +262,7 @@ class $TagTable extends Tag with TableInfo<$TagTable, TagData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-
   $TagTable(this.attachedDatabase, [this._alias]);
-
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -297,16 +280,12 @@ class $TagTable extends Tag with TableInfo<$TagTable, TagData> {
           GeneratedColumn.checkTextLength(minTextLength: 1, maxTextLength: 100),
       type: DriftSqlType.string,
       requiredDuringInsert: true);
-
   @override
   List<GeneratedColumn> get $columns => [id, name];
-
   @override
   String get aliasedName => _alias ?? 'tag';
-
   @override
   String get actualTableName => 'tag';
-
   @override
   VerificationContext validateIntegrity(Insertable<TagData> instance,
       {bool isInserting = false}) {
@@ -326,7 +305,6 @@ class $TagTable extends Tag with TableInfo<$TagTable, TagData> {
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
-
   @override
   TagData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -347,9 +325,7 @@ class $TagTable extends Tag with TableInfo<$TagTable, TagData> {
 class TagData extends DataClass implements Insertable<TagData> {
   final int id;
   final String name;
-
   const TagData({required this.id, required this.name});
-
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -373,7 +349,6 @@ class TagData extends DataClass implements Insertable<TagData> {
       name: serializer.fromJson<String>(json['name']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -387,7 +362,6 @@ class TagData extends DataClass implements Insertable<TagData> {
         id: id ?? this.id,
         name: name ?? this.name,
       );
-
   @override
   String toString() {
     return (StringBuffer('TagData(')
@@ -399,7 +373,6 @@ class TagData extends DataClass implements Insertable<TagData> {
 
   @override
   int get hashCode => Object.hash(id, name);
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -409,17 +382,14 @@ class TagData extends DataClass implements Insertable<TagData> {
 class TagCompanion extends UpdateCompanion<TagData> {
   final Value<int> id;
   final Value<String> name;
-
   const TagCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
   });
-
   TagCompanion.insert({
     this.id = const Value.absent(),
     required String name,
   }) : name = Value(name);
-
   static Insertable<TagData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -464,9 +434,7 @@ class $IngredientTable extends Ingredient
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-
   $IngredientTable(this.attachedDatabase, [this._alias]);
-
   static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
@@ -490,16 +458,12 @@ class $IngredientTable extends Ingredient
   late final GeneratedColumn<int> calories = GeneratedColumn<int>(
       'calories', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-
   @override
   List<GeneratedColumn> get $columns => [id, name, calories];
-
   @override
   String get aliasedName => _alias ?? 'ingredient';
-
   @override
   String get actualTableName => 'ingredient';
-
   @override
   VerificationContext validateIntegrity(Insertable<IngredientData> instance,
       {bool isInserting = false}) {
@@ -525,7 +489,6 @@ class $IngredientTable extends Ingredient
 
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
-
   @override
   IngredientData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -549,10 +512,8 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
   final int id;
   final String name;
   final int calories;
-
   const IngredientData(
       {required this.id, required this.name, required this.calories});
-
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -579,7 +540,6 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
       calories: serializer.fromJson<int>(json['calories']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -596,7 +556,6 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
         name: name ?? this.name,
         calories: calories ?? this.calories,
       );
-
   @override
   String toString() {
     return (StringBuffer('IngredientData(')
@@ -609,7 +568,6 @@ class IngredientData extends DataClass implements Insertable<IngredientData> {
 
   @override
   int get hashCode => Object.hash(id, name, calories);
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -623,20 +581,17 @@ class IngredientCompanion extends UpdateCompanion<IngredientData> {
   final Value<int> id;
   final Value<String> name;
   final Value<int> calories;
-
   const IngredientCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
     this.calories = const Value.absent(),
   });
-
   IngredientCompanion.insert({
     this.id = const Value.absent(),
     required String name,
     required int calories,
   })  : name = Value(name),
         calories = Value(calories);
-
   static Insertable<IngredientData> custom({
     Expression<int>? id,
     Expression<String>? name,
@@ -688,9 +643,7 @@ class $DishTagTable extends DishTag with TableInfo<$DishTagTable, DishTagData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-
   $DishTagTable(this.attachedDatabase, [this._alias]);
-
   static const VerificationMeta _dishIdMeta = const VerificationMeta('dishId');
   @override
   late final GeneratedColumn<int> dishId = GeneratedColumn<int>(
@@ -707,16 +660,12 @@ class $DishTagTable extends DishTag with TableInfo<$DishTagTable, DishTagData> {
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES tag (id)'));
-
   @override
   List<GeneratedColumn> get $columns => [dishId, tagId];
-
   @override
   String get aliasedName => _alias ?? 'dish_tag';
-
   @override
   String get actualTableName => 'dish_tag';
-
   @override
   VerificationContext validateIntegrity(Insertable<DishTagData> instance,
       {bool isInserting = false}) {
@@ -739,7 +688,6 @@ class $DishTagTable extends DishTag with TableInfo<$DishTagTable, DishTagData> {
 
   @override
   Set<GeneratedColumn> get $primaryKey => const {};
-
   @override
   DishTagData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -760,9 +708,7 @@ class $DishTagTable extends DishTag with TableInfo<$DishTagTable, DishTagData> {
 class DishTagData extends DataClass implements Insertable<DishTagData> {
   final int dishId;
   final int tagId;
-
   const DishTagData({required this.dishId, required this.tagId});
-
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -786,7 +732,6 @@ class DishTagData extends DataClass implements Insertable<DishTagData> {
       tagId: serializer.fromJson<int>(json['tagId']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -800,7 +745,6 @@ class DishTagData extends DataClass implements Insertable<DishTagData> {
         dishId: dishId ?? this.dishId,
         tagId: tagId ?? this.tagId,
       );
-
   @override
   String toString() {
     return (StringBuffer('DishTagData(')
@@ -812,7 +756,6 @@ class DishTagData extends DataClass implements Insertable<DishTagData> {
 
   @override
   int get hashCode => Object.hash(dishId, tagId);
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -824,18 +767,15 @@ class DishTagData extends DataClass implements Insertable<DishTagData> {
 class DishTagCompanion extends UpdateCompanion<DishTagData> {
   final Value<int> dishId;
   final Value<int> tagId;
-
   const DishTagCompanion({
     this.dishId = const Value.absent(),
     this.tagId = const Value.absent(),
   });
-
   DishTagCompanion.insert({
     required int dishId,
     required int tagId,
   })  : dishId = Value(dishId),
         tagId = Value(tagId);
-
   static Insertable<DishTagData> custom({
     Expression<int>? dishId,
     Expression<int>? tagId,
@@ -880,9 +820,7 @@ class $DishIngredientTable extends DishIngredient
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-
   $DishIngredientTable(this.attachedDatabase, [this._alias]);
-
   static const VerificationMeta _dishIdMeta = const VerificationMeta('dishId');
   @override
   late final GeneratedColumn<int> dishId = GeneratedColumn<int>(
@@ -900,16 +838,12 @@ class $DishIngredientTable extends DishIngredient
       requiredDuringInsert: true,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('REFERENCES ingredient (id)'));
-
   @override
   List<GeneratedColumn> get $columns => [dishId, ingredientId];
-
   @override
   String get aliasedName => _alias ?? 'dish_ingredient';
-
   @override
   String get actualTableName => 'dish_ingredient';
-
   @override
   VerificationContext validateIntegrity(Insertable<DishIngredientData> instance,
       {bool isInserting = false}) {
@@ -934,7 +868,6 @@ class $DishIngredientTable extends DishIngredient
 
   @override
   Set<GeneratedColumn> get $primaryKey => const {};
-
   @override
   DishIngredientData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
@@ -956,9 +889,7 @@ class DishIngredientData extends DataClass
     implements Insertable<DishIngredientData> {
   final int dishId;
   final int ingredientId;
-
   const DishIngredientData({required this.dishId, required this.ingredientId});
-
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -982,7 +913,6 @@ class DishIngredientData extends DataClass
       ingredientId: serializer.fromJson<int>(json['ingredientId']),
     );
   }
-
   @override
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
@@ -997,7 +927,6 @@ class DishIngredientData extends DataClass
         dishId: dishId ?? this.dishId,
         ingredientId: ingredientId ?? this.ingredientId,
       );
-
   @override
   String toString() {
     return (StringBuffer('DishIngredientData(')
@@ -1009,7 +938,6 @@ class DishIngredientData extends DataClass
 
   @override
   int get hashCode => Object.hash(dishId, ingredientId);
-
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1021,18 +949,15 @@ class DishIngredientData extends DataClass
 class DishIngredientCompanion extends UpdateCompanion<DishIngredientData> {
   final Value<int> dishId;
   final Value<int> ingredientId;
-
   const DishIngredientCompanion({
     this.dishId = const Value.absent(),
     this.ingredientId = const Value.absent(),
   });
-
   DishIngredientCompanion.insert({
     required int dishId,
     required int ingredientId,
   })  : dishId = Value(dishId),
         ingredientId = Value(ingredientId);
-
   static Insertable<DishIngredientData> custom({
     Expression<int>? dishId,
     Expression<int>? ingredientId,
@@ -1081,11 +1006,9 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $DishTagTable dishTag = $DishTagTable(this);
   late final $DishIngredientTable dishIngredient = $DishIngredientTable(this);
   late final DishDao dishDao = DishDao(this as AppDatabase);
-
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
-
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
       [dish, tag, ingredient, dishTag, dishIngredient];
@@ -1093,12 +1016,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
 
 mixin _$DishDaoMixin on DatabaseAccessor<AppDatabase> {
   $DishTable get dish => attachedDatabase.dish;
-
   $TagTable get tag => attachedDatabase.tag;
-
   $IngredientTable get ingredient => attachedDatabase.ingredient;
-
   $DishTagTable get dishTag => attachedDatabase.dishTag;
-
   $DishIngredientTable get dishIngredient => attachedDatabase.dishIngredient;
 }
