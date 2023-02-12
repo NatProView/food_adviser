@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -79,7 +80,7 @@ class _NewDishInputState extends State<NewDishInput> {
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(hintText: 'Calories'),
         onChanged: (inputCalories) {
-          newDishCalories = inputCalories as int;
+          newDishCalories = int.parse(inputCalories);
         },
       ),
     );
@@ -95,11 +96,11 @@ class _NewDishInputState extends State<NewDishInput> {
         inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
         decoration: InputDecoration(hintText: 'Time to prepare'),
         onChanged: (inputTimeToPrepare) {
-          if(inputTimeToPrepare as int > 300){
+          if(int.parse(inputTimeToPrepare) > 300){
             inputTimeToPrepare = "300";
-            newDishTimeToPrepare = inputTimeToPrepare as int;
+            newDishTimeToPrepare = int.parse(inputTimeToPrepare);
           } else {
-            newDishTimeToPrepare = inputTimeToPrepare as int;
+            newDishTimeToPrepare = int.parse(inputTimeToPrepare);
           }
         },
       ),
@@ -178,13 +179,17 @@ class _NewDishInputState extends State<NewDishInput> {
         onPressed:() {
           final database = Provider.of<AppDatabase>(context, listen: false);
           final tempDish = Dish();
+          final tempDishData = DishData(
+            id: tempDish.id as int,
+            name: newDishName,
+            calories: newDishCalories,
+            timeToPrepare: newDishTimeToPrepare,
+          );
+          if (kDebugMode) {
+            print("wahoo");
+          }
           final dish = FullDish(
-              DishData(
-                id: tempDish.id as int,
-                name: newDishName,
-                calories: newDishCalories,
-                timeToPrepare: newDishTimeToPrepare,
-              ),
+              tempDishData,
               [],
               [],
           );

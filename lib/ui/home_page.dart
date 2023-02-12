@@ -61,7 +61,7 @@ Widget _buildListItem(DishData itemDish, AppDatabase database) {
           label: 'Delete',
           backgroundColor: Colors.red,
           icon: Icons.delete,
-          onPressed: (context) => database.dishDao.deleteDish(itemDish.id as int),
+          onPressed: (context) => database.dishDao.deleteDish(itemDish.id),
         ),
       ],
     ),
