@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -178,22 +179,15 @@ class _NewDishInputState extends State<NewDishInput> {
         icon: Icon(Icons.add),
         onPressed:() {
           final database = Provider.of<AppDatabase>(context, listen: false);
-          final tempDish = Dish();
-          final tempDishData = DishData(
-            id: tempDish.id as int,
-            name: newDishName,
-            calories: newDishCalories,
-            timeToPrepare: newDishTimeToPrepare,
+          final tempDishCompanion = DishCompanion(
+            name: Value(newDishName),
+            calories: Value(newDishCalories),
+            timeToPrepare: Value(newDishTimeToPrepare),
           );
           if (kDebugMode) {
             print("wahoo");
           }
-          final dish = FullDish(
-              tempDishData,
-              [],
-              [],
-          );
-          database.dishDao.insertDish(dish);
+          database.dishDao.insertDish(tempDishCompanion, [], []);
           resetValuesAfterSubmit();
         },
     );

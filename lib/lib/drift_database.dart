@@ -132,36 +132,35 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
   Stream<List<DishData>> watchAllDishes() => select(dish).watch();
 
 
-  Future<void> insertDish(FullDish entry) {
+  Future<void> insertDish(DishCompanion data, List<TagData> tags, List<IngredientData> ingredients) {
     return transaction(() async {
-      final newDish = entry.dish;
-      await into(dish).insert(newDish, mode: InsertMode.replace);
+      await into(dish).insert(data, mode: InsertMode.replace);
 
       //zliczanie kalorii i dodawnie ich do juz obecnego w tabeli disha
       int count = 0;
-      for (final ingredient in entry.ingredients) {
+      for (final ingredient in ingredients) {
         count += ingredient.calories;
       }
 
-      await (delete(dishTag)..where((entry) => entry.dishId.equals(newDish.id)))
+      await (delete(dishTag)..where((entry) => entry.dishId.equals(data.id as int)))
           .go();
 
       await (delete(dishIngredient)
-            ..where((entry) => entry.dishId.equals(newDish.id)))
+        ..where((entry) => entry.dishId.equals(data.id as int)))
           .go();
 
-      await (update(dish)..where((d) => d.id.equals(newDish.id))).write(
+      await (update(dish)..where((d) => d.id.equals(data.id as int))).write(
         DishCompanion(
           calories: Value(count),
         ),
       );
-      for (final tag in entry.tags) {
+      for (final tag in tags) {
         await into(dishTag)
-            .insert(DishTagData(dishId: newDish.id, tagId: tag.id));
+            .insert(DishTagData(dishId: data.id as int, tagId: tag.id));
       }
-      for (final ingredient in entry.ingredients) {
+      for (final ingredient in ingredients) {
         await into(dishIngredient).insert(DishIngredientData(
-            dishId: newDish.id, ingredientId: ingredient.id));
+            dishId: data.id as int, ingredientId: ingredient.id));
       }
     });
   }
