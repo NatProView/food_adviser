@@ -204,9 +204,7 @@ class _NewDishInputState extends State<NewDishInput> {
             calories: driftLib.Value(newDishCalories),
             timeToPrepare: driftLib.Value(newDishTimeToPrepare),
           );
-          if (kDebugMode) {
-            print("wahoo");
-          }
+          Navigator.pop(context);
           database.dishDao.insertDish(tempDishCompanion, [], []);
           resetValuesAfterSubmit();
         },

@@ -15,7 +15,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
-    final database = Provider.of<AppDatabase>(context);
     return Scaffold(
       appBar: AppBar(
         title: Row(children: [

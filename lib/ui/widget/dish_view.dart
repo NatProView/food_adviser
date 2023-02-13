@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../lib/drift_database.dart';
 
@@ -97,6 +98,8 @@ class DishViewScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          final database = Provider.of<AppDatabase>(context, listen: false);
+          database.dishDao.deleteDish(itemDish.id);
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('removed this dish')),
 
@@ -104,6 +107,7 @@ class DishViewScreen extends StatelessWidget {
           Navigator.pop(context);
           // Navigator.push(context, MaterialPageRoute(builder: (context) =>  DishAddScreen()));
           // Add your onPressed code here!
+
         },
 
         backgroundColor: Colors.redAccent,
