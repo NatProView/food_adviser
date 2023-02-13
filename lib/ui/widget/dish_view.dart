@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -92,7 +94,21 @@ class DishViewScreen extends StatelessWidget {
 
           )
 
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('removed this dish')),
+
+          );
+          Navigator.pop(context);
+          // Navigator.push(context, MaterialPageRoute(builder: (context) =>  DishAddScreen()));
+          // Add your onPressed code here!
+        },
+
+        backgroundColor: Colors.redAccent,
+        child: const Icon(Icons.delete),
+      ),
     );
   }
 }
