@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_projects/ui/test_page.dart';
 import 'package:flutter_projects/ui/widget/dish_view.dart';
+import 'package:flutter_projects/ui/widget/new_dish_view.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -28,9 +28,19 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         children: <Widget>[
           Expanded(child: _buildDishList(context)),
-          NewDishInput(),
+          // NewDishInput(),
+
         ],
-      )
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context) =>  DishAddScreen()));
+      // Add your onPressed code here!
+    },
+
+    backgroundColor: Colors.orangeAccent,
+    child: const Icon(Icons.add),
+    ),
     );
   }
 }

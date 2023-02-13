@@ -42,13 +42,11 @@ class _NewDishInputState extends State<NewDishInput> {
     timeToPrepareController = TextEditingController();
     nameController = TextEditingController();
   }
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
       child: Row(
-        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           _buildNameField(context),
           _buildCaloriesField(context),
@@ -60,6 +58,23 @@ class _NewDishInputState extends State<NewDishInput> {
       ),
     );
   }
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Container(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Row(
+  //       children: <Widget>[
+  //         _buildNameField(context),
+  //         _buildCaloriesField(context),
+  //         _buildTimeToPrepareField(context),
+  //         // _buildTagListField(context),
+  //         // _buildIngredientsListField(context),
+  //         _submitFullDish(context),
+  //       ],
+  //     ),
+  //   );
+  // }
+
 
   Expanded _buildNameField(BuildContext context) {
     return Expanded(
