@@ -1,4 +1,4 @@
-import 'package:drift/drift.dart';
+import 'package:drift/drift.dart' as driftLib;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,14 +46,19 @@ class _NewDishInputState extends State<NewDishInput> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
+      child: Column(
         children: <Widget>[
-          _buildNameField(context),
-          _buildCaloriesField(context),
-          _buildTimeToPrepareField(context),
+          // _buildNameField(context),
+          // _buildCaloriesField(context),
+          // _buildTimeToPrepareField(context),
+          Row(children: [_buildNameField(context),],),
+          Row(children: [_buildCaloriesField(context),],),
+          Row(children: [_buildTimeToPrepareField(context),],),
           // _buildTagListField(context),
           // _buildIngredientsListField(context),
           _submitFullDish(context),
+
+
         ],
       ),
     );
@@ -195,9 +200,9 @@ class _NewDishInputState extends State<NewDishInput> {
         onPressed:() {
           final database = Provider.of<AppDatabase>(context, listen: false);
           final tempDishCompanion = DishCompanion(
-            name: Value(newDishName),
-            calories: Value(newDishCalories),
-            timeToPrepare: Value(newDishTimeToPrepare),
+            name: driftLib.Value(newDishName),
+            calories: driftLib.Value(newDishCalories),
+            timeToPrepare: driftLib.Value(newDishTimeToPrepare),
           );
           if (kDebugMode) {
             print("wahoo");
