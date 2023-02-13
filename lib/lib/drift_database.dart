@@ -12,10 +12,10 @@ class Dish extends Table {
 
   //jesli nie bedzie dzialac mozna check i nawyzej sprawdzic poprawne zastosowanie
   IntColumn get calories =>
-      integer().check(calories.isBiggerThan(0 as Expression<int>))();
+      integer()();
 
   IntColumn get timeToPrepare =>
-      integer().check(timeToPrepare.isBetweenValues(1, 300))();
+      integer()();
 }
 
 class Tag extends Table {
@@ -142,26 +142,26 @@ class DishDao extends DatabaseAccessor<AppDatabase> with _$DishDaoMixin {
         count += ingredient.calories;
       }
 
-      await (delete(dishTag)..where((entry) => entry.dishId.equals(data.id as int)))
-          .go();
-
-      await (delete(dishIngredient)
-        ..where((entry) => entry.dishId.equals(data.id as int)))
-          .go();
-
-      await (update(dish)..where((d) => d.id.equals(data.id as int))).write(
-        DishCompanion(
-          calories: Value(count),
-        ),
-      );
-      for (final tag in tags) {
-        await into(dishTag)
-            .insert(DishTagData(dishId: data.id as int, tagId: tag.id));
-      }
-      for (final ingredient in ingredients) {
-        await into(dishIngredient).insert(DishIngredientData(
-            dishId: data.id as int, ingredientId: ingredient.id));
-      }
+      // await (delete(dishTag)..where((entry) => entry.dishId.equals(data.id.value)))
+      //     .go();
+      //
+      // await (delete(dishIngredient)
+      //   ..where((entry) => entry.dishId.equals(data.id.value)))
+      //     .go();
+      //
+      // await (update(dish)..where((d) => d.id.equals(data.id.value))).write(
+      //   DishCompanion(
+      //     calories: Value(count),
+      //   ),
+      // );
+      // for (final tag in tags) {
+      //   await into(dishTag)
+      //       .insert(DishTagData(dishId: data.id.value, tagId: tag.id));
+      // }
+      // for (final ingredient in ingredients) {
+      //   await into(dishIngredient).insert(DishIngredientData(
+      //       dishId: data.id as int, ingredientId: ingredient.id));
+      // }
     });
   }
 

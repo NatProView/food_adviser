@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
+    final database = Provider.of<AppDatabase>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Dishes'),
@@ -50,7 +51,6 @@ Widget _buildListItem(DishData itemDish, AppDatabase database) {
     startActionPane: ActionPane(
       motion: const DrawerMotion(),
       children: [
-
       ],
     ),
     endActionPane: ActionPane(
@@ -65,8 +65,13 @@ Widget _buildListItem(DishData itemDish, AppDatabase database) {
         ),
       ],
     ),
-    child: AboutListTile(
-      applicationName: "Test",
+    child: Row(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        Expanded(child: Text(itemDish.name)),
+        Expanded(child: Text(itemDish.timeToPrepare.toString())),
+        Expanded(child: Text(itemDish.calories.toString())),
+      ],
     ),
   );
 }

@@ -30,17 +30,13 @@ class $DishTable extends Dish with TableInfo<$DishTable, DishData> {
   @override
   late final GeneratedColumn<int> calories = GeneratedColumn<int>(
       'calories', aliasedName, false,
-      check: () => calories.isBiggerThan(0 as Expression<int>),
-      type: DriftSqlType.int,
-      requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   static const VerificationMeta _timeToPrepareMeta =
       const VerificationMeta('timeToPrepare');
   @override
   late final GeneratedColumn<int> timeToPrepare = GeneratedColumn<int>(
       'time_to_prepare', aliasedName, false,
-      check: () => timeToPrepare.isBetweenValues(1, 300),
-      type: DriftSqlType.int,
-      requiredDuringInsert: true);
+      type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [id, name, calories, timeToPrepare];
   @override
