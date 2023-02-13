@@ -1,22 +1,53 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-import 'package:flutter_projects/lib/drift_database.dart';
+import '../models/dish.dart';
 import '../views/widgets/recipe_card.dart';
 import 'dish_add_page.dart';
 import 'dish_search_page.dart';
-import 'widget/new_dish_input_widget.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
+
+
 class _HomePageState extends State<HomePage> {
+
+  List<Dish> dishes = [Dish(1, "Schabowy z ziemniakami i surowka", 120),
+    Dish(2, "Kurczak z ryzem", 40),
+    Dish(3, "Jajecznica", 10)];
+
+  Widget dishTemplate(dish) {
+    return Card(
+      margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
+      child: Column(
+        children: <Widget>[
+          Text(
+            dish.name,
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.grey[600],
+            ),
+          ),
+          SizedBox(height: 6),
+          Text(
+            dish.
+          )
+        ]
+      )
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         title: Row(children: [
           Icon(Icons.restaurant_menu),
@@ -66,68 +97,11 @@ class _HomePageState extends State<HomePage> {
         )
       ),
     body: Column(
-      children: <Widget>[],
+      children: dishes.map((dish) => Text('${dish.name} - ${dish.prepTime} - ${dish.id}'),
+      ).toList(),
     )
 
 
     );
   }
 }
-
-// class DishList extends StatefulWidget {
-//   const DishList({Key? key}) : super(key: key);
-//
-//   @override
-//   State<DishList> createState() => _DishListState();
-// }
-//
-// class _DishListState extends State<DishList> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
-//
-// StreamBuilder<List<DishData>> _buildDishList(BuildContext context) {
-//   final database = Provider.of<AppDatabase>(context);
-//   return StreamBuilder(
-//       stream: database.dishDao.watchAllDishes(),
-//       builder: (context, AsyncSnapshot<List<DishData>> snapshot) {
-//         final dishes = snapshot.data ?? [];
-//
-//         return ListView.builder(
-//             itemCount: dishes.length,
-//             itemBuilder: (_, index) {
-//               final itemDish = dishes[index];
-//               return _buildListItem(itemDish, database);
-//             },
-//         );
-//       }
-//   );
-// }
-//
-// Widget _buildListItem(DishData itemDish, AppDatabase database) {
-//   return Slidable(
-//     startActionPane: ActionPane(
-//       motion: const DrawerMotion(),
-//       children: [
-//
-//       ],
-//     ),
-//     endActionPane: ActionPane(
-//       motion: const DrawerMotion(),
-//       extentRatio: 0.25,
-//       children: [
-//         SlidableAction(
-//           label: 'Delete',
-//           backgroundColor: Colors.red,
-//           icon: Icons.delete,
-//           onPressed: (context) => database.dishDao.deleteDish(itemDish.id),
-//         ),
-//       ],
-//     ),
-//     child: AboutListTile(
-//       applicationName: "Test",
-//     ),
-//   );
-// }
