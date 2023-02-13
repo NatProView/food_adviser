@@ -21,6 +21,13 @@ class MyApp extends StatelessWidget {
         // No longer throws
         return MaterialApp(
           title: 'Material App',
+          theme: ThemeData(
+            primarySwatch: Colors.orange,
+            primaryColor: Colors.white,
+            textTheme: TextTheme(
+              bodyMedium: TextStyle(color: Colors.grey)
+            ),
+          ),
           home: HomePage(),
         );
       },
