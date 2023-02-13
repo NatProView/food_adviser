@@ -56,6 +56,7 @@ class _NewDishInputState extends State<NewDishInput> {
           Row(children: [_buildTimeToPrepareField(context),],),
           // _buildTagListField(context),
           // _buildIngredientsListField(context),
+          const SizedBox(height: 20),
           _submitFullDish(context),
 
 
@@ -193,23 +194,40 @@ class _NewDishInputState extends State<NewDishInput> {
   //     },
   //   );
   // }
+  ElevatedButton _submitFullDish(BuildContext context) {
+    return ElevatedButton(
+      onPressed: () {
+                final database = Provider.of<AppDatabase>(context, listen: false);
+                final tempDishCompanion = DishCompanion(
+                  name: driftLib.Value(newDishName),
+                  calories: driftLib.Value(newDishCalories),
+                    timeToPrepare: driftLib.Value(newDishTimeToPrepare));
+                  Navigator.pop(context);
+                  database.dishDao.insertDish(tempDishCompanion, [], []);
+                  resetValuesAfterSubmit();
 
-  IconButton _submitFullDish(BuildContext context) {
-    return IconButton(
-        icon: Icon(Icons.add),
-        onPressed:() {
-          final database = Provider.of<AppDatabase>(context, listen: false);
-          final tempDishCompanion = DishCompanion(
-            name: driftLib.Value(newDishName),
-            calories: driftLib.Value(newDishCalories),
-            timeToPrepare: driftLib.Value(newDishTimeToPrepare),
-          );
-          Navigator.pop(context);
-          database.dishDao.insertDish(tempDishCompanion, [], []);
-          resetValuesAfterSubmit();
-        },
+      },
+      child: const Text('Submit'),
+
     );
   }
+  //TODO dziala
+  // IconButton _submitFullDish(BuildContext context) {
+  //   return IconButton(
+  //       icon: Icon(Icons.add_box),
+  //       onPressed:() {
+  //         final database = Provider.of<AppDatabase>(context, listen: false);
+  //         final tempDishCompanion = DishCompanion(
+  //           name: driftLib.Value(newDishName),
+  //           calories: driftLib.Value(newDishCalories),
+  //           timeToPrepare: driftLib.Value(newDishTimeToPrepare),
+  //         );
+  //         Navigator.pop(context);
+  //         database.dishDao.insertDish(tempDishCompanion, [], []);
+  //         resetValuesAfterSubmit();
+  //       },
+  //   );
+  // }
 
   void resetValuesAfterSubmit() {
     setState(() {
